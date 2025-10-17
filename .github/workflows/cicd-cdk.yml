@@ -1,0 +1,133 @@
+name: Cloud CICD CDK workflow
+
+on:
+  workflow_call:
+    inputs:
+      test-account-number:
+        required: true
+        type: string
+      prod-account-number:
+        required: true
+        type: string
+      artifact-bucket-name:
+        required: true
+        type: string
+      tool-bucket-name:
+        required: true
+        type: string
+      org-name:
+       required: true
+       type: string
+      product-name:
+        required: true
+        type: string
+      module-name:
+        required: true
+        type: string
+
+# Set the default permissions of the GITHUB_TOKEN to none for security purposes
+permissions: {}
+
+env:
+  TEST_ENV: test
+  PROD_ENV: prod
+  TEST_ACCOUNT_NUMBER: ${{ inputs.test-account-number }}
+  PROD_ACCOUNT_NUMBER: ${{ inputs.prod-account-number }}
+  AWS_DEFAULT_REGION: ap-northeast-1
+  ARTIFACT_BUCKET_NAME: ${{ inputs.artifact-bucket-name }}
+  TOOL_BUCKET_NAME: ${{ inputs.tool-bucket-name }}
+  ORG_NAME: ${{ inputs.org-name }}
+  PRODUCT_NAME: ${{ inputs.product-name }}
+  MODULE_NAME: ${{ inputs.module-name }}
+  KENOBI_VERSION: 3.0.4
+
+jobs:
+  python-lint:
+    name: Python lint
+    if: github.event_name == 'pull_request' &&|| github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+  python-scan:
+    name: Python scan
+    if: github.event_name == 'pull_request' &&|| github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+  dockerfile-scan:
+    name: Dockerfile scan
+    if: github.event_name == 'pull_request' &&|| github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+  run-pytest:
+    name: Run pytest
+    if: github.event_name == 'pull_request' &&|| github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+  generate-version:
+    name: Generate version
+    needs: [python-lint, python-scan, dockerfile-scan, run-pytest]
+    if: github.event_name == 'pull_request' &&|| github.base_ref == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
