@@ -117,9 +117,39 @@ jobs:
         run: |
           echo ${{ env.VERSION_FULL }}
 
+  synth-cdk-prod:
+    name: Synth CDK prod
+    needs: [generate-version]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      VERSION_FULL: ${{ needs.generate-version.outputs.version-full }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5  
 
+      - name: Synth CDK prod
+        run: |
+          echo ${{ env.VERSION_FULL }}
 
+  build-lambda-image:
+    name: Build Lambda image
+    needs: [generate-version]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    env:
+      VERSION_FULL: ${{ needs.generate-version.outputs.version-full }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5  
 
+      - name: Build Lambda image
+        run: |    
+          echo ${{ env.VERSION_FULL }}
 
 
 
