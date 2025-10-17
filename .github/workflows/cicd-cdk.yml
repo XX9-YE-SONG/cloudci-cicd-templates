@@ -94,9 +94,16 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+    outputs:
+      version-full: ${{ steps.gen.outputs.version-full }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
+      - name: Generate version
+        id: gen
+        run: |
+          echo "version-full=v1.1.1" >> $GITHUB_OUTPUT
 
   synth-cdk-test:
     name: Synth CDK test
@@ -106,9 +113,15 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+    env:
+      VERSION_FULL: ${{ needs.generate-version.outputs.version-full }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5  
+
+      - name: Synth CDK test
+        run: |
+          echo ${{ env.VERSION_FULL }}
 
 
 
